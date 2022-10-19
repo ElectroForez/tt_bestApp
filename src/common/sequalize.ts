@@ -8,5 +8,9 @@ export const sequelize = new Sequelize({
     password: process.env.DB_PASS,
     host: process.env.DB_HOST || 'localhost',
     port: Number(process.env.DB_HOST) || 5432,
-    models: [User]
+    models: [User],
+    sync: {
+        force: true,
+        logging: false
+    }
 });
