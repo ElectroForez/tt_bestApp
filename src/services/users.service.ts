@@ -8,9 +8,21 @@ export class UsersService {
     }
 
     async add(username: string) {
+        const candidate = await this.getByUsername(username);
+        if (candidate) return undefined; // undo add
+
         const user = new User({username});
         await user.save();
-        console.log(user);
         return user;
+    }
+
+    async getById(id: number) {
+        const result = await User.findByPk(id);
+        return result;
+    }
+
+    async getByUsername(username: string) {
+        const result = await User.findOne({where: {username}});
+        return result;
     }
 }

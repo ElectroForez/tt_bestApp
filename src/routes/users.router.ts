@@ -8,3 +8,7 @@ const usersController = new UsersController();
 router.post("/getAll", async (req, res) => {
     await usersController.getAll(req, res)
 });
+
+router.post("/add", async (req, res) => {
+    await usersController.add(req, res);
+});

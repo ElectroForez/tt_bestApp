@@ -1,15 +1,13 @@
-import {Table, Column, Model, CreatedAt} from 'sequelize-typescript';
+import {Table, Column, Model, PrimaryKey} from 'sequelize-typescript';
 
 interface UserCreationAttrs {
     username: string;
 }
 
-@Table
+@Table({updatedAt: false})
 export class User extends Model<User, UserCreationAttrs> {
-    @Column
-    username!: string;
 
-    @CreatedAt
-    creationDate!: Date;
+    @Column({unique: true})
+    username!: string;
 
 }
