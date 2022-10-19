@@ -1,5 +1,5 @@
 import {sequelize} from "../common/sequalize";
-import {User} from "./users.model";
+import {User} from "../models/users.model";
 
 export class UsersService {
     private usersRepository = sequelize.getRepository(User);
@@ -13,6 +13,10 @@ export class UsersService {
         return result;
     }
 
-    async add() {
+    async add(username: string) {
+        const user = new User({username});
+        await user.save();
+        console.log(user);
+        return user;
     }
 }

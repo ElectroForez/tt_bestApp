@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
-import {User} from "../users/users.model";
+import {User} from "../models/users.model";
 
 export const sequelize = new Sequelize({
     database: process.env.DB_NAME || 'postgres',
