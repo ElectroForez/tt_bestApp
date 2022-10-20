@@ -1,11 +1,11 @@
-import {Table, Column, Model, PrimaryKey} from 'sequelize-typescript';
+import {Table, Column, Model} from 'sequelize-typescript';
 
 interface UserCreationAttrs {
     username: string;
 }
 
 @Table({updatedAt: false})
-export class User extends Model<User, UserCreationAttrs> {
+export default class User extends Model<User, UserCreationAttrs> {
 
     @Column({unique: true})
     username!: string;
