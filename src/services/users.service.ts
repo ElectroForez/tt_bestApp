@@ -1,4 +1,5 @@
-import {User} from "../models/users.model";
+import {CreateUserDto} from "../dto";
+import {User} from "../models";
 
 export class UsersService {
 
@@ -7,7 +8,9 @@ export class UsersService {
         return result;
     }
 
-    async add(username: string) {
+    async add(dto: CreateUserDto) {
+        const username = dto.username;
+
         const candidate = await this.getByUsername(username);
         if (candidate) return undefined; // undo add
 

@@ -1,9 +1,10 @@
-import {UsersService} from "../services/users.service";
 import {Request, Response} from "express";
 import ApiError from "../errors/ApiError";
 import 'express-async-errors';
+import {CreateUserDto} from "../dto";
+import {UsersService} from "../services/users.service";
 
-export default class UsersController {
+export class UsersController {
     private usersService = new UsersService();
 
     async getAll(req: Request, res: Response) {
@@ -11,14 +12,15 @@ export default class UsersController {
         res.send(result);
     }
 
-    async add(req: Request<{}, {}, {username: string}>, res: Response) {
-        const username = req.body.username;
+    async add(req: Request<{}, {}, CreateUserDto>, res: Response) {
+        const dto = req.body;
 
-        if (!username) {
+        if (!dto.username) {
             throw ApiError.BadRequest("Username must not be empty");
         }
 
-        const result = await this.usersService.add(username);
+        const result = await this.usersService.add(dto);
+
         if (result) {
             res.send(result);
         } else {
