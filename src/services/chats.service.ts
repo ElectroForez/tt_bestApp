@@ -14,6 +14,7 @@ export class ChatsService {
 
     async create(name: string) {
         const chat = new Chat({name});
+        chat.users = [];
         await chat.save();
         return chat;
     }
@@ -39,7 +40,7 @@ export class ChatsService {
     }
 
     async getById(id: number) {
-        const result = await Chat.findByPk(id);
+        const result = await Chat.findByPk(id, {include: {all: true}});
         return result;
     }
 }

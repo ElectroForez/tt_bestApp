@@ -14,12 +14,19 @@ export class ChatsController {
 
     async add(req: Request<{}, {}, CreateChatDto>, res: Response) {
         const dto = req.body;
+        if (!dto.name) {
+            throw ApiError.BadRequest("Chat name must not be empty");
+        }
+
+        if (!dto.users) dto.users = [];
+
+        dto.users.forEach((item, pos) => {
+            if (dto.users.indexOf(item) != pos) throw ApiError.BadRequest("Users id must be unique")
+        })
 
         const result = await this.chatsService.add(dto);
-        if (result) {
-            res.send(result);
-        } else {
-            throw ApiError.Conflict("User with this username already exists");
-        }
+        res.send({
+            id: result.id
+        });
     }
 }
