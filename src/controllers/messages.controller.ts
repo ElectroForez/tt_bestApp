@@ -26,4 +26,18 @@ export class MessagesController {
             msg: result
         });
     }
+
+    async getMessagesFromChat(req: Request<{}, {}, {chatId: number}>, res: Response) {
+        const dto = req.body;
+
+        if (dto.chatId == undefined) {
+            throw ApiError.BadRequest("chatId must not be undefined");
+        }
+
+        const result = await this.messagesService.getFromChat(dto.chatId);
+
+        res.send({
+            result
+        });
+    }
 }

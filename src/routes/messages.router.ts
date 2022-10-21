@@ -12,3 +12,7 @@ router.post("/getAll", async (req, res) => {
 router.post("/add", async (req, res) => {
     await messagesController.add(req, res);
 });
+
+router.post("/get", async (req, res) => {
+    await messagesController.getMessagesFromChat(req, res);
+});

@@ -1,11 +1,9 @@
 import {CreateMessageDto} from "../dto";
 import {Message, User} from "../models";
 import ApiError from "../errors/ApiError";
-import {ChatsService} from "./chats.service";
 import {UsersService} from "./users.service";
 
 export class MessagesService {
-    private chatsService = new ChatsService();
     private usersService = new UsersService();
 
     async getAll() {
@@ -33,6 +31,16 @@ export class MessagesService {
 
     async getById(id: number) {
         const result = await Message.findByPk(id, {include: {all: true}});
+        return result;
+    }
+
+    async getFromChat(chatId: number) {
+        const result = await Message.findAll({
+            where: {
+                chatId
+            },
+            order: [['createdAt', 'ASC']]
+        })
         return result;
     }
 }
