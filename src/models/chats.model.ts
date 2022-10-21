@@ -15,6 +15,7 @@ export class Chat extends Model<Chat, ChatCreationAttrs> {
 
     @BelongsToMany(() => User, () => ChatUsers)
     users!: User[];
+
 }
 
 export default Chat;

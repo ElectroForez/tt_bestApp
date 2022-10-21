@@ -29,4 +29,16 @@ export class ChatsController {
             id: result.id
         });
     }
+
+    async getUserChats(req: Request<{}, {}, {user: number}>, res: Response) {
+        const dto = req.body;
+        if (!dto.user) {
+            throw ApiError.BadRequest("User id must not be empty");
+        }
+
+        const result = await this.chatsService.getUserChats(dto.user);
+        res.send({
+            result
+        });
+    }
 }

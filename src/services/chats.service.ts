@@ -1,7 +1,9 @@
 import ApiError from "../errors/ApiError";
 import {CreateChatDto} from "../dto";
 import {UsersService} from "./users.service";
-import {Chat, User} from "../models";
+import {Chat, ChatUsers, Message, User} from "../models";
+import UsersModel from "../models/users.model";
+
 
 
 export class ChatsService {
@@ -42,5 +44,19 @@ export class ChatsService {
     async getById(id: number) {
         const result = await Chat.findByPk(id, {include: {all: true}});
         return result;
+    }
+
+    async getUserChats(userId: number) {
+        const chats = await User.findByPk(userId, {
+            attributes: [],
+            include: [{
+                model: Chat,
+                through: {
+                    attributes: []
+                }
+            }]
+        });
+
+        return chats;
     }
 }
