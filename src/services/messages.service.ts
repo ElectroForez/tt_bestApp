@@ -13,11 +13,11 @@ export class MessagesService {
 
     async add(dto: CreateMessageDto) {
         const user = await this.usersService.getById(dto.author);
-        if (!user) throw ApiError.Conflict(`User with id ${dto.author} not exists`);
+        if (!user) throw ApiError.NotFound(`User with id ${dto.author} not found`);
 
         const chat = user.getDataValue('chats').find(chat => chat.id === dto.chat);
 
-        if (!chat) throw ApiError.Conflict(`User ${dto.author} not exists in chat ${dto.chat}`);
+        if (!chat) throw ApiError.Forbidden(`User ${dto.author} not exists in chat ${dto.chat}`);
 
         const message = new Message({
             author: dto.author,

@@ -3,6 +3,7 @@ import ApiError from "../errors/ApiError";
 import 'express-async-errors';
 import {CreateMessageDto} from "../dto";
 import {MessagesService} from "../services/messages.service";
+import {UpdateUserDto} from "../dto/update-user.dto";
 
 export class MessagesController {
     private messagesService = new MessagesService();
