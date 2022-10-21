@@ -3,6 +3,7 @@ import ApiError from "../errors/ApiError";
 import 'express-async-errors';
 import {CreateUserDto} from "../dto";
 import {UsersService} from "../services/users.service";
+import {UpdateUserDto} from "../dto/update-user.dto";
 
 export class UsersController {
     private usersService = new UsersService();
@@ -23,6 +24,48 @@ export class UsersController {
 
         res.send({
             id: result.id
+        });
+    }
+
+    async delete(req: Request<{}, {}, {id: number}>, res: Response) {
+        const id = req.body.id;
+
+        if (typeof id !== "number") {
+            throw ApiError.BadRequest("id must be number");
+        }
+
+        const result = await this.usersService.deleteById(id);
+        res.send({
+            id: result
+        });
+    }
+
+    async update(req: Request<{}, {}, UpdateUserDto>, res: Response) {
+        const dto = req.body;
+
+        if (typeof dto.id !== "number") {
+            throw ApiError.BadRequest("id must be a number");
+        }
+
+        const result = await this.usersService.update(dto);
+
+        res.send({
+            id: result
+        });
+    }
+
+    async get(req: Request<{}, {}, {id: number}>, res: Response) {
+        const id = req.body.id;
+
+        if (typeof id !== "number") {
+            throw ApiError.BadRequest("id must be a number");
+        }
+
+        const result = await this.usersService.getById(id);
+
+        if (!result) throw ApiError.NotFound(`User with id ${id} not found`)
+        res.send({
+            result
         });
     }
 }
