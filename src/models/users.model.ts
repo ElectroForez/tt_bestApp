@@ -1,6 +1,7 @@
 import {Table, Column, Model, BelongsToMany} from 'sequelize-typescript';
 import {Chat} from "./chats.model";
-import {ChatUsers} from "./chats-users.model";
+import {Message} from "./messages.model";
+import ChatUsers from "./chat-users.model";
 
 interface UserCreationAttrs {
     username: string;
@@ -15,3 +16,5 @@ export class User extends Model<User, UserCreationAttrs> {
     @BelongsToMany(() => Chat, () => ChatUsers)
     chats!: Chat[];
 }
+
+export default User;

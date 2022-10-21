@@ -1,5 +1,6 @@
 import {CreateUserDto} from "../dto";
-import {User} from "../models";
+import {Chat, User} from "../models";
+import ApiError from "../errors/ApiError";
 
 export class UsersService {
 
@@ -12,7 +13,7 @@ export class UsersService {
         const username = dto.username;
 
         const candidate = await this.getByUsername(username);
-        if (candidate) return undefined; // undo add
+        if (candidate) throw ApiError.Conflict("User with this username already exists");
 
         const user = new User({username});
         await user.save();
@@ -20,7 +21,7 @@ export class UsersService {
     }
 
     async getById(id: number) {
-        const result = await User.findByPk(id);
+        const result = await User.findByPk(id, {include: {model: Chat}});
         return result;
     }
 

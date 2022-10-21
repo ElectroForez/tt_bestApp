@@ -21,10 +21,8 @@ export class UsersController {
 
         const result = await this.usersService.add(dto);
 
-        if (result) {
-            res.send(result);
-        } else {
-            throw ApiError.Conflict("User with this username already exists");
-        }
+        res.send({
+            id: result.id
+        });
     }
 }
