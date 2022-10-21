@@ -29,6 +29,9 @@ export class ChatsService {
 
 
     async add(dto: CreateChatDto) {
+        const candidate = await this.getByName(dto.name);
+        if (candidate) throw ApiError.Conflict("Chat with this name already exists");
+
         const chat = await this.create(dto.name);
 
         for (const userId of dto.users) {
@@ -46,6 +49,11 @@ export class ChatsService {
         return result;
     }
 
+    async getByName(name: string) {
+        const result = await Chat.findOne({where: {name}});
+        return result;
+    }
+
     async getUserChats(userId: number) {
         const user = await User.findByPk(userId);
         if (!user) return;
@@ -53,7 +61,7 @@ export class ChatsService {
         const [results, metadata] = await sequelize.query(`
             SELECT "Chats".* FROM "Chats"
             JOIN "ChatUsers" ON "ChatUsers"."chatId" = "Chats"."id"
-            JOIN "Messages" ON "Messages"."chatId" = "Chats"."id"
+            JOIN "Messages" ON "Messages"."chat" = "Chats"."id"
             WHERE "ChatUsers"."authorId" = ${userId}
             GROUP BY "Chats"."id"
             ORDER BY MAX("Messages"."createdAt") DESC

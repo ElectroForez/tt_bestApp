@@ -15,26 +15,33 @@ export class MessagesController {
     async add(req: Request<{}, {}, CreateMessageDto>, res: Response) {
         const dto = req.body;
 
-        if (dto.text == undefined) {
-            throw ApiError.BadRequest("Text must not be undefined");
+        if (typeof dto.text !== "string") {
+            throw ApiError.BadRequest("text must be a string");
+        }
+
+        if (typeof dto.author !== "number") {
+            throw ApiError.BadRequest("author must be a number");
+        }
+
+        if (typeof dto.chat !== "number") {
+            throw ApiError.BadRequest("text must be a number");
         }
 
         const result = await this.messagesService.add(dto);
 
         res.send({
-            id: result.id,
-            msg: result
+            id: result.id
         });
     }
 
-    async getMessagesFromChat(req: Request<{}, {}, {chatId: number}>, res: Response) {
-        const dto = req.body;
+    async getMessagesFromChat(req: Request<{}, {}, {chat: number}>, res: Response) {
+        const chat = req.body.chat;
 
-        if (dto.chatId == undefined) {
-            throw ApiError.BadRequest("chatId must not be undefined");
+        if (typeof chat !== "number") {
+            throw ApiError.BadRequest("chat must be a number");
         }
 
-        const result = await this.messagesService.getFromChat(dto.chatId);
+        const result = await this.messagesService.getFromChat(chat);
 
         res.send({
             result

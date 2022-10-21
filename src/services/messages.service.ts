@@ -14,13 +14,14 @@ export class MessagesService {
     async add(dto: CreateMessageDto) {
         const user = await this.usersService.getById(dto.author);
         if (!user) throw ApiError.Conflict(`User with id ${dto.author} not exists`);
+
         const chat = user.getDataValue('chats').find(chat => chat.id === dto.chat);
 
         if (!chat) throw ApiError.Conflict(`User ${dto.author} not exists in chat ${dto.chat}`);
 
         const message = new Message({
-            authorId: dto.author,
-            chatId: dto.chat,
+            author: dto.author,
+            chat: dto.chat,
             text: dto.text
         });
         await message.save();
@@ -37,7 +38,7 @@ export class MessagesService {
     async getFromChat(chatId: number) {
         const result = await Message.findAll({
             where: {
-                chatId
+                chat: chatId
             },
             order: [['createdAt', 'ASC']]
         })

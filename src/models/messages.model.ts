@@ -5,8 +5,8 @@ import {CreateMessageDto} from "../dto";
 import {ChatUsers} from "./chat-users.model";
 
 interface MessageCreationAttrs {
-    chatId: number;
-    authorId: number;
+    chat: number;
+    author: number;
     text: string;
 }
 
@@ -15,11 +15,11 @@ export class Message extends Model<Message, MessageCreationAttrs> {
 
     @ForeignKey(() => ChatUsers)
     @Column
-    chatId!: number;
+    chat!: number;
 
     @ForeignKey(() => ChatUsers)
     @Column
-    authorId!: number;
+    author!: number;
 
     @Column
     text!: string;
