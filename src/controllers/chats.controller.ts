@@ -37,6 +37,8 @@ export class ChatsController {
         }
 
         const result = await this.chatsService.getUserChats(dto.user);
+        if (!result) throw ApiError.Conflict(`User with id ${dto.user} not exists`)
+
         res.send({
             result
         });

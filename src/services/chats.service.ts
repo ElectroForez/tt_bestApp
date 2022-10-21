@@ -1,8 +1,8 @@
 import ApiError from "../errors/ApiError";
 import {CreateChatDto} from "../dto";
 import {UsersService} from "./users.service";
-import {Chat, ChatUsers, Message, User} from "../models";
-import UsersModel from "../models/users.model";
+import {Chat, User} from "../models";
+import {sequelize} from "../common/sequalize";
 
 
 
@@ -47,16 +47,18 @@ export class ChatsService {
     }
 
     async getUserChats(userId: number) {
-        const chats = await User.findByPk(userId, {
-            attributes: [],
-            include: [{
-                model: Chat,
-                through: {
-                    attributes: []
-                }
-            }]
-        });
+        const user = await User.findByPk(userId);
+        if (!user) return;
 
-        return chats;
+        const [results, metadata] = await sequelize.query(`
+            SELECT "Chats".* FROM "Chats"
+            JOIN "ChatUsers" ON "ChatUsers"."chatId" = "Chats"."id"
+            JOIN "Messages" ON "Messages"."chatId" = "Chats"."id"
+            WHERE "ChatUsers"."authorId" = ${userId}
+            GROUP BY "Chats"."id"
+            ORDER BY MAX("Messages"."createdAt") DESC
+        `)
+
+        return results;
     }
 }
