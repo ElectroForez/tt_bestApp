@@ -14,14 +14,8 @@ export class ChatsController {
 
     async add(req: Request<{}, {}, CreateChatDto>, res: Response) {
         const dto = req.body;
-        if (!dto.name || typeof dto.name !== "string") {
-            throw ApiError.BadRequest("Chat name must be string");
-        }
-
-        if (!dto.users) dto.users = [];
 
         dto.users.forEach((item, pos) => {
-            if (typeof item !== "number") throw ApiError.BadRequest("All users id must be number");
             if (dto.users.indexOf(item) != pos) throw ApiError.BadRequest("Users id must be unique");
         })
 
@@ -33,9 +27,6 @@ export class ChatsController {
 
     async getUserChats(req: Request<{}, {}, {user: number}>, res: Response) {
         const user = req.body.user;
-        if (typeof user !== "number") {
-            throw ApiError.BadRequest("User id must be number");
-        }
 
         const result = await this.chatsService.getUserChats(user);
         if (!result) throw ApiError.Conflict(`User with id ${user} not exists`)

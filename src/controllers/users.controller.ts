@@ -4,6 +4,7 @@ import 'express-async-errors';
 import {CreateUserDto} from "../dto";
 import {UsersService} from "../services/users.service";
 import {UpdateUserDto} from "../dto/update-user.dto";
+import {validationResult} from "express-validator";
 
 export class UsersController {
     private usersService = new UsersService();
@@ -16,10 +17,6 @@ export class UsersController {
     async add(req: Request<{}, {}, CreateUserDto>, res: Response) {
         const dto = req.body;
 
-        if (!dto.username) {
-            throw ApiError.BadRequest("Username must not be empty");
-        }
-
         const result = await this.usersService.add(dto);
 
         res.send({
@@ -30,10 +27,6 @@ export class UsersController {
     async delete(req: Request<{}, {}, {id: number}>, res: Response) {
         const id = req.body.id;
 
-        if (typeof id !== "number") {
-            throw ApiError.BadRequest("id must be number");
-        }
-
         const result = await this.usersService.deleteById(id);
         res.send({
             id: result
@@ -42,10 +35,6 @@ export class UsersController {
 
     async update(req: Request<{}, {}, UpdateUserDto>, res: Response) {
         const dto = req.body;
-
-        if (typeof dto.id !== "number") {
-            throw ApiError.BadRequest("id must be a number");
-        }
 
         const result = await this.usersService.update(dto);
 
@@ -56,10 +45,6 @@ export class UsersController {
 
     async get(req: Request<{}, {}, {id: number}>, res: Response) {
         const id = req.body.id;
-
-        if (typeof id !== "number") {
-            throw ApiError.BadRequest("id must be a number");
-        }
 
         const result = await this.usersService.getById(id);
 

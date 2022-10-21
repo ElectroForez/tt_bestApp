@@ -36,7 +36,9 @@ export class ChatsService {
 
         for (const userId of dto.users) {
             const user = await this.usersService.getById(userId);
-            if (!user) throw ApiError.NotFound(`User with id ${userId} not exists`);
+            if (!user) {
+                throw ApiError.NotFound(`User with id ${userId} not exists`);
+            }
 
             await this.addUserToChat(chat, user);
         }
