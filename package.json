@@ -2,7 +2,7 @@
   "name": "tt_bestApp",
   "description": "Test task for BestApp",
   "scripts": {
-    "start": "env-cmd ts-node src/main.ts",
+    "start": "env-cmd --silent ts-node src/main.ts",
     "dev:watch": "tsc-watch --onSuccess 'npm start'"
   },
   "dependencies": {

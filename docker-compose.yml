@@ -1,0 +1,30 @@
+version: '3.0'
+
+services:
+  api:
+    build: .
+    restart: always
+    hostname: api
+    environment:
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASS: root
+      DB_HOST: postgres
+    ports:
+      - "9000:3000"
+    depends_on:
+      - postgres
+
+  postgres:
+    hostname: postgres
+    image: postgres:14
+    environment:
+      PG_DATA: /var/lib/postgresql/data
+      POSTGRES_PASSWORD: root
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  pgdata:
